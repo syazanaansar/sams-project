@@ -86,6 +86,7 @@ erDiagram
 
     Classrooms ||--o{ Students : "has"
     Students ||--o{ Attendances : "records"
+```
 
 ---
 
@@ -113,3 +114,4 @@ sequenceDiagram
     M -->> C: Confirm success
     C -->> V: Redirect to attendance list view
     V -->> T: Display "Attendance Recorded Successfully"
+```
