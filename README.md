@@ -87,6 +87,8 @@ erDiagram
     Classrooms ||--o{ Students : "has"
     Students ||--o{ Attendances : "records"
 
+---
+
 ## 6. Sequence Diagram
 
 sequenceDiagram
