@@ -2,7 +2,7 @@
 
 **Course:** INFO 3305 Web Application Development  
 **Semester:** 1, 2025/2026 — Section 4  
-**Submission deadline:** 11/12/2025
+**Submission deadline:** 12/12/2025
 
 ---
 
@@ -47,12 +47,6 @@ SAMS is a web-based Model-View-Controller (MVC) application developed using the 
 - **Dashboard & Insights**: Charts and summary — total attendance, absent rates, and recent activity.  
 - **Responsive UI**: Works on desktop and mobile using Blade + CSS (optionally Tailwind or Bootstrap).
 
-### Additional (Optional)
-- Student self-service portal to view personal attendance.  
-- Email notifications for low attendance.  
-- Bulk upload of students via CSV.  
-- API endpoints for integration.
-
 ---
 
 ## 4. System Architecture (MVC)
@@ -63,72 +57,56 @@ SAMS is a web-based Model-View-Controller (MVC) application developed using the 
 ---
 
 ## 5. Database Design (ERD)
-Below is the ERD in Mermaid `erDiagram` syntax (GitHub supports rendering Mermaid):
 
 ```mermaid
 erDiagram
-    USERS {
+    Classrooms {
         int id PK
         string name
-        string email
-        string password
-        string role
-        timestamp created_at
-        timestamp updated_at
+        int teacher_id
+        datetime updated_at
+        datetime created_at
     }
 
-    STUDENTS {
+    Students {
         int id PK
         string name
-        string matric_no
-        string email
-        int class_id FK
-        timestamp created_at
-        timestamp updated_at
+        int student_id
+        int classroom_id FK
+        datetime created_at
     }
 
-    CLASSES {
+    Attendances {
         int id PK
-        string code
-        string name
-        int lecturer_id FK
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    SESSIONS {
-        int id PK
-        int class_id FK
-        date session_date
-        time start_time
-        time end_time
-        string topic
-        timestamp created_at
-        timestamp updated_at
-    }
-
-    ATTENDANCES {
-        int id PK
-        int session_id FK
-        int student_id FK
+        date date
         string status
-        string remark
-        timestamp created_at
-        timestamp updated_at
+        int student_id FK
+        datetime created_at
     }
 
-    AUDIT_LOGS {
-        int id PK
-        int user_id FK
-        string action
-        string details
-        timestamp created_at
-    }
+    Classrooms ||--o{ Students : "has"
+    Students ||--o{ Attendances : "records"
 
-    USERS ||--o{ CLASSES : teaches
-    CLASSES ||--o{ SESSIONS : has
-    SESSIONS ||--o{ ATTENDANCES : records
-    STUDENTS ||--o{ ATTENDANCES : attends
-    CLASSES ||--o{ STUDENTS : contains
-    USERS ||--o{ AUDIT_LOGS : creates
+## 6. Sequence Diagram
 
+sequenceDiagram
+    autonumber
+
+    participant T as Teacher (User)
+    participant V as Web Browser (View)
+    participant C as Laravel Controller
+    participant M as Model (Eloquent/DB)
+
+    T ->> V: Open "Mark Attendance" Page
+    V ->> C: GET /attendance/create
+    C ->> M: Retrieve class and student list
+    M -->> C: Return data
+    C -->> V: Render attendance form (Blade View)
+    V -->> T: Display Attendance Form
+
+    T ->> V: Submit attendance data
+    V ->> C: POST /attendance/store
+    C ->> M: Save attendance record
+    M -->> C: Confirm success
+    C -->> V: Redirect to attendance list view
+    V -->> T: Display "Attendance Recorded Successfully"
