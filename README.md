@@ -91,6 +91,7 @@ erDiagram
 
 ## 6. Sequence Diagram
 
+```mermaid
 sequenceDiagram
     autonumber
 
