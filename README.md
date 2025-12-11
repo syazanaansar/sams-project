@@ -111,7 +111,7 @@ erDiagram
         int id PK
         int session_id FK
         int student_id FK
-        enum status  /* Present/Absent/Excused */
+        string status
         string remark
         timestamp created_at
         timestamp updated_at
@@ -121,15 +121,14 @@ erDiagram
         int id PK
         int user_id FK
         string action
-        text details
+        string details
         timestamp created_at
     }
 
-    USERS ||--o{ CLASSES : "lectures"
-    CLASSES ||--o{ SESSIONS : "has"
-    SESSIONS ||--o{ ATTENDANCES : "records"
-    STUDENTS ||--o{ ATTENDANCES : "attends"
-    CLASSES ||--o{ STUDENTS : "contains"
-    USERS ||--o{ AUDIT_LOGS : "creates"
-    STUDENTS }|..|{ CLASSES : "assigned_to"
+    USERS ||--o{ CLASSES : teaches
+    CLASSES ||--o{ SESSIONS : has
+    SESSIONS ||--o{ ATTENDANCES : records
+    STUDENTS ||--o{ ATTENDANCES : attends
+    CLASSES ||--o{ STUDENTS : contains
+    USERS ||--o{ AUDIT_LOGS : creates
 
